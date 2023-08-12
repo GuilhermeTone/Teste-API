@@ -55,19 +55,29 @@ class ClientesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Clientes $cliente)
+    public function show($id)
     {
-        return $cliente;
+        try {
+
+            $cliente = Clientes::findOrFail($id);
+            return $cliente;
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+
+            return response()->json(['error' => 'Cliente não encontrado'], 404);
+
+        }
+        
     }
 
      /**
      * Display the specified resource.
      */
-    public function showPlacaCarro($numero)
+    public function showPlacaCarro(Clientes $cliente, $numero)
     {
  
         try {
-            $clientes = Clientes::whereRaw("SUBSTRING(PlacaCarro, -1) = ?", [$numero])->get();
+            $clientes = $cliente->whereRaw("SUBSTRING(PlacaCarro, -1) = ?", [$numero])->get();
 
             if ($clientes->isEmpty()) {
                 return response()->json(['error' => 'Nenhum cliente encontrado com a placa correspondente'], 404);
@@ -112,7 +122,7 @@ class ClientesController extends Controller
 
             return response()->json(['success' => 'Cliente Deletado com sucesso'], 200);
 
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (\Exception $e) {
             
             return response()->json(['error' => $e->errors()], 404);
 
