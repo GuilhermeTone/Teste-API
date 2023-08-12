@@ -15,12 +15,15 @@ http://127.0.0.1:8989/api/cliente/consulta/final-placa/{id} //HTTP Method: GET /
 
 Para iniciar o projeto, basta ter o docker, dar os comandos
 
-docker composer up -d
+composer install
+
+docker compose up -d
 
 docker-compose exec app bash
 
 ao entrar no terminal do container dar o comando
 
-composer install
-
 php artisan migrate
+
+E pronto a API estara pronta para uso, qualquer duvida me chamar
+
